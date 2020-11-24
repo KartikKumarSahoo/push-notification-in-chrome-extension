@@ -22,6 +22,11 @@ iframe.contentWindow.document.close();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js", { scope: "/" });
+
+  // navigator.serviceWorker.addEventListener("message", (event) => {
+  //   console.log(event.data.msg, event.data.url);
+  //   chrome.runtime.sendMessage({ text: event.data.msg });
+  // });
 }
 
 const loadAndCacheButton = document.getElementById("btn");
@@ -32,9 +37,21 @@ loadAndCacheButton.addEventListener("click", () => {
   console.log("Image submitted for cache", imageUrlInput.value);
 });
 
-// document
-//   .getElementById("enable-notification")
-//   .addEventListener("click", askPermission);
+// Listen to any window.postMessage and pass it over to chrome runtime so that extension components can act upon it.
+// window.addEventListener("message", function (data) {
+//   console.log("Inside window.message listener of extension");
+//   chrome.runtime.sendMessage({ text: data.data });
+// });
+
+// Handle notifications
+// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+//   debugger;
+//   if (message.type === "notification") {
+//     chrome.notifications.create(message.options);
+//   }
+//   sendResponse(true); // Synchronously send response
+//   // return true; If you want to call the sendResponse asynchronously then return true from here.
+// });
 
 // Asks for Notification permission
 function askPermission() {
