@@ -1,0 +1,10 @@
+{
+  "manifest_version": 2,
+  "name": "Service Worker Demo",
+  "version": "1.0",
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_icon": "/todo.png"
+  },
+  "permissions": ["<all_urls>", "notifications"]
+}

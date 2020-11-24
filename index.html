@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Extension Title</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tailwindcss/dist/tailwind.css"
+    />
+  </head>
+
+  <body class="bg-grey-light p-4 w-screen min-w-64">
+    <div class="p-4">
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-lg font-bold mb-2"
+          for="username"
+        >
+          Cache Image for Offline usage
+        </label>
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="imgurl"
+          type="text"
+          placeholder="Image URL"
+          value="https://images.unsplash.com/photo-1534882039189-c85b94bf55ee?ixlib=rb-0.3.5&s=240f8caaa0a9f804b7c435e219af891f&auto=format&fit=crop&w=1950&q=80"
+        />
+      </div>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="button"
+        id="btn"
+      >
+        Load & Cache
+      </button>
+    </div>
+
+    <div class="app block sm:flex">
+      <div class="p-4 flex-1">
+        <h3>Service worker in Chrome Extension</h3>
+        <p class="mb-4">The image below is cached:</p>
+        <img
+          id="img"
+          src="https://images.unsplash.com/photo-1534882039189-c85b94bf55ee?ixlib=rb-0.3.5&s=240f8caaa0a9f804b7c435e219af891f&auto=format&fit=crop&w=1950&q=80"
+        />
+      </div>
+
+      <div class="p-4 flex-1">
+        <h3>Iframe</h3>
+        <p class="mb-4">The image below is <strong>not</strong> cached:</p>
+        <iframe height="100%" width="100%" frameborder="0" id="iframe"></iframe>
+      </div>
+    </div>
+    <div class="my-10">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hidden"
+        type="button"
+        id="enable-notification"
+      >
+        Enable Push Notification
+      </button>
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hidden"
+        type="button"
+        id="disable-notification"
+      >
+        Disable Push Notification
+      </button>
+    </div>
+    <script src="demo.js"></script>
+    <script src="service-worker.js"></script>
+  </body>
+</html>
