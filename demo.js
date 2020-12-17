@@ -20,14 +20,14 @@ iframe.contentWindow.document.open();
 iframe.contentWindow.document.write(iframeContent);
 iframe.contentWindow.document.close();
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js", { scope: "/" });
+// if ("serviceWorker" in navigator) {
+//   navigator.serviceWorker.register("service-worker.js", { scope: "/" });
 
-  // navigator.serviceWorker.addEventListener("message", (event) => {
-  //   console.log(event.data.msg, event.data.url);
-  //   chrome.runtime.sendMessage({ text: event.data.msg });
-  // });
-}
+//   // navigator.serviceWorker.addEventListener("message", (event) => {
+//   //   console.log(event.data.msg, event.data.url);
+//   //   chrome.runtime.sendMessage({ text: event.data.msg });
+//   // });
+// }
 
 const loadAndCacheButton = document.getElementById("btn");
 const imageUrlInput = document.getElementById("imgurl");
@@ -237,3 +237,60 @@ function showDisableSubscriptionButton() {
   disableNotification.classList.remove("hidden");
   localStorage.setItem("isSubscribed", "true");
 }
+
+/* SSE Handling code */
+const enableSSETimerButton = document.getElementById("enable-sse-timer");
+const triggerSSEButton = document.getElementById("trigger-sse");
+const closeSSEButton = document.getElementById("close-sse");
+
+if (!!window.EventSource) {
+  enableSSETimerButton.addEventListener("click", function () {
+    var source = new EventSource("http://localhost:5000/countdown", {
+      withCredentials: true,
+    });
+
+    source.addEventListener(
+      "message",
+      function (e) {
+        console.log("SSE: ON MESSAGE", e);
+        document.getElementById("data").innerHTML = e.data;
+      },
+      false
+    );
+
+    source.addEventListener(
+      "open",
+      function (e) {
+        console.log("SSE: ON OPEN", e);
+        document.getElementById("state").innerHTML = "Connected";
+      },
+      false
+    );
+
+    source.addEventListener(
+      "error",
+      function (e) {
+        console.log("SSE: ON ERROR", e);
+        const id_state = document.getElementById("state");
+        if (e.eventPhase == EventSource.CLOSED) source.close();
+        if (e.target.readyState == EventSource.CLOSED) {
+          id_state.innerHTML = "Disconnected";
+        } else if (e.target.readyState == EventSource.CONNECTING) {
+          id_state.innerHTML = "Connecting...";
+        }
+      },
+      false
+    );
+  });
+} else {
+  console.error("Your browser doesn't support SSE");
+  enableSSETimerButton.classList.add("hidden");
+}
+
+triggerSSEButton.addEventListener("click", function () {
+  fetch("http://localhost:5000/trigger-sse");
+});
+
+closeSSEButton.addEventListener("click", function () {
+  fetch("http://localhost:5000/close-sse");
+});

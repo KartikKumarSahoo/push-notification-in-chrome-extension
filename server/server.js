@@ -41,6 +41,51 @@ app.get("/trigger-notification", (req, res) => {
   res.status(200).send();
 });
 
+app.get("/countdown", function (req, res) {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+  global.sseConnection = res;
+  global.count = 20;
+  countdown(res, 10);
+});
+
+app.get("/trigger-sse-countdown", (req, res) => {
+  if (count === 0) {
+    console.log("NO MORE SSE.");
+    sseConnection.end();
+  }
+  sseCountdown();
+  console.log("COUNT", count);
+  res.end();
+});
+
+app.get("/trigger-sse", (req, res) => {
+  sseConnection.write("data: " + faker.lorem.words(4) + "\n\n");
+  console.log("SSE sent");
+  res.end();
+});
+
+app.get("/close-sse", (req, res) => {
+  console.log("Closing SSE connection", count);
+  sseConnection.end();
+  res.end();
+});
+
+function sseCountdown() {
+  sseConnection.write("data: " + count + "\n\n");
+  console.log("COUNTDOWN", count);
+  count--;
+}
+
+function countdown(res, count) {
+  res.write("data: " + count + "\n\n");
+  if (count) setTimeout(() => countdown(res, count - 1), 1000);
+  // else res.end();
+}
+
 const triggerNotification = (subscription, notifPayload) => {
   const payload = JSON.stringify(notifPayload);
   // console.log(subscription);

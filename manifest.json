@@ -7,14 +7,15 @@
     "48": "/todo.png"
   },
   "browser_action": {
-      "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_title": "Click to open the extension"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
   "background": {
-      "scripts": ["background.js"],
-      "persistent": true
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "permissions": ["<all_urls>"],
   "optional_permissions": ["notifications"]

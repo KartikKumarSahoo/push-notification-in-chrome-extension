@@ -43,8 +43,10 @@ self.addEventListener("push", function (event) {
         if (clients && clients.length) {
           // Send a response - the clients
           // array is ordered by last focused
-          clients[0].postMessage({
-            msg: pushPayload.title,
+          clients.forEach((client) => {
+            client.postMessage({
+              msg: pushPayload.title,
+            });
           });
         }
       });

@@ -2,9 +2,21 @@
   "manifest_version": 2,
   "name": "Service Worker Demo",
   "version": "1.0",
+  "icons": {
+    "16": "/todo.png",
+    "48": "/todo.png"
+  },
   "browser_action": {
     "default_popup": "index.html",
-    "default_icon": "/todo.png"
+    "default_title": "Click to open the extension"
   },
-  "permissions": ["<all_urls>", "notifications"]
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": ["<all_urls>"],
+  "optional_permissions": ["notifications"]
 }

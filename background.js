@@ -1,5 +1,14 @@
 console.log("BACKGROUND SCRIPT IS RUNNING");
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js", { scope: "/" });
+
+  // navigator.serviceWorker.addEventListener("message", (event) => {
+  //   console.log(event.data.msg, event.data.url);
+  //   chrome.runtime.sendMessage({ text: event.data.msg });
+  // });
+}
+
 // NOTE: THIS DOESN'T WORK. "push" event can't be listened from scripts other than service worker
 // Push listener and notifier code
 // self.addEventListener("push", function (event) {
@@ -41,3 +50,38 @@ navigator.serviceWorker.addEventListener("message", (event) => {
   console.log("FROM SERVICE WORKER SCRIPT", event.data.msg, event.data.url);
   chrome.browserAction.setBadgeText({ text: event.data.msg });
 });
+
+if (!!window.EventSource) {
+  var source = new EventSource("http://localhost:5000/countdown", {
+    withCredentials: true,
+  });
+
+  source.addEventListener(
+    "message",
+    function (e) {
+      console.log("SSE: ON MESSAGE", e);
+    },
+    false
+  );
+
+  source.addEventListener(
+    "open",
+    function (e) {
+      console.log("SSE: ON OPEN", e);
+    },
+    false
+  );
+
+  source.addEventListener(
+    "error",
+    function (e) {
+      console.log("SSE: ON ERROR", e);
+      // if (this.readyState == EventSource.CONNECTING) {
+      //   console.log(`Reconnecting (readyState=${this.readyState})...`);
+      // } else {
+      //   console.log("Error has occured.");
+      // }
+    },
+    false
+  );
+}
